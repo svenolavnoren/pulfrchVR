@@ -74,6 +74,6 @@ REM --- Starta appen ---
 echo.
 echo Starting pulfrichVR ...
 echo.
-"%SCRIPT_DIR%.venv\Scripts\python.exe" "%SCRIPT_DIR%pulfrichVR_0.9-087.py" %*
+"%SCRIPT_DIR%.venv\Scripts\python.exe" "%SCRIPT_DIR%pulfrichVR.py" %*
 
 endlocal
