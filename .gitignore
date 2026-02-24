@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual envs
+.venv/
+venv/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# pulfrichVR working dirs / artefacts
+proxy_cache/
+VideoOneshot/
+archive_*/
+VR_*.bat
+VR_*.sh
+Film_*.bat
+Photo_*.bat
+Stereo_image_*.bat
+Source_images_*.bat
