@@ -9,7 +9,7 @@ Workflow (high level):
 
 ## Windows quick start
 
-Background: All my testing this far been done using Linux Mint and Windows 11 (64-bit x86). A shorter test on my older laptop with Windows 10 slipped by too and that just worked. I hope and believe it will run well out-of-the-box with a majority of modern Windows- and Linux versions when your virtual environment is propelrly set up. PulfrichVR.py is designed with the goal of silently just work and let you create. 
+Background: All my testing this far been done using Linux Mint and Windows 11. Both those with 64-bit x86 hardware. ARM I haven't yet tried. A shorter test on my older laptop with Windows 10 slipped by and that just worked. I hope and believe it will run well out-of-the-box with the majority of modern Windows- or Linux versions when your Python environment is set up. PulfrichVR.py is designed with the goal of silently just work and let you create. 
 
 1. Install **Python 3.11 or later** from python.org  
 2. Download the latest pulfrichVR zip and extract it to a folder (e.g. `C:\pulfrichVR`)
