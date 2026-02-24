@@ -28,3 +28,37 @@ On first run, the script will:
 
 On subsequent runs, it will simply start pulfrichVR immediately.
 
+
+
+
+## Linux quick start
+
+Tested on Linux Mint / Ubuntu-like systems.
+
+1. Make sure you have Python 3.11 or later installed
+2. Install ffmpeg via your package manager, for example:
+
+   ```bash
+   sudo apt install ffmpeg
+
+
+Clone the repository and enter the folder:
+
+git clone https://github.com/svenolavnoren/pulfrichVR.git
+cd pulfrichVR
+
+
+Make the launcher script executable (only once):
+
+chmod +x run_pulfrichVR.sh
+
+
+Run pulfrichVR:
+
+./run_pulfrichVR.sh
+
+
+On first run the script will create a local .venv and install PySide6.
+On subsequent runs it will just start pulfrichVR directly.
+
+
