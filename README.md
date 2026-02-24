@@ -17,7 +17,9 @@ Background: All my testing this far been done using Linux Mint and Windows 11. B
    - `pulfrichVR_0.9-087.py`
    - `requirements.txt`
    - `run_pulfrichVR.bat`
-   -  ffmpeg.exe` and ffprobe.exe  /Note: Any good version of ff...exe should be fine. Bundled are my tried and tested versions.
+   -  ffmpeg.exe
+   -  ffprobe.exe
+      <br>      Note: Any good version of ff...exe should be fine. Bundled are my tried and tested versions.
 4. Double-click `run_pulfrichVR.bat`
 
 On first run, the script will:
@@ -47,19 +49,20 @@ Clone the repository and enter the folder:
    ```bash
    git clone https://github.com/svenolavnoren/pulfrichVR.git
    cd pulfrichVR
+```
 
 
 Make the launcher script executable (only once):
 
    ```bash
    chmod +x run_pulfrichVR.sh
-
+```
 
 Run pulfrichVR:
 
    ```bash
    ./run_pulfrichVR.sh
-
+```
 
 On first run the script will create a local .venv and install PySide6.
 On subsequent runs it will just start pulfrichVR directly.
