@@ -44,18 +44,21 @@ Tested on Linux Mint / Ubuntu-like systems.
 
 Clone the repository and enter the folder:
 
-git clone https://github.com/svenolavnoren/pulfrichVR.git
-cd pulfrichVR
+   ```bash
+   git clone https://github.com/svenolavnoren/pulfrichVR.git
+   cd pulfrichVR
 
 
 Make the launcher script executable (only once):
 
-chmod +x run_pulfrichVR.sh
+   ```bash
+   chmod +x run_pulfrichVR.sh
 
 
 Run pulfrichVR:
 
-./run_pulfrichVR.sh
+   ```bash
+   ./run_pulfrichVR.sh
 
 
 On first run the script will create a local .venv and install PySide6.
