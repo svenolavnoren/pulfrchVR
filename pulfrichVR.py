@@ -1,6 +1,6 @@
 # ------------------------------
-# pulfrichVR.py 0.9-087 
-# support for vr tour insv
+APP_NAME = "pulfrichVR"
+APP_VERSION = "0.9-087"
 # Copyright (c) 2025–2026 Sven-Olav Norén
 # ------------------------------
 
@@ -68,8 +68,8 @@ import sys, os, platform, math, stat, glob, subprocess, shlex  # du har redan my
 
 IS_WIN = platform.system().lower().startswith("win")
 FROZEN = getattr(sys, "frozen", False)
-WORKSHOP_LABEL = "360 bat runner" #0.9-049
-APP_TITLE = "home3d frames"   # 0.9-057: nedtonad, gemensam app-titel
+WORKSHOP_LABEL = "360 bat runner"  # 0.9-049
+APP_TITLE = APP_NAME               # 0.9-087: use pulfrichVR as window title
 
 #0.9-009a 1)
 # Där Home3dFrames.exe ligger när packad, annars py-filen
