@@ -4,6 +4,7 @@ APP_VERSION = "0.9-087"
 # Copyright (c) 2025–2026 Sven-Olav Norén
 # ------------------------------
 
+import os
 import platform, glob, shlex, stat, math
 
 # Rå Windows-flagga (inklusive Wine) #0.9-066
@@ -22,7 +23,6 @@ IS_NATIVE_WIN = RAW_IS_WIN and not IN_WINE
 IS_WIN = RAW_IS_WIN
 
 import sys
-import os
 
 import glob
 import platform
