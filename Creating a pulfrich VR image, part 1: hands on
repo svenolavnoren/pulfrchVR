@@ -16,9 +16,9 @@ TL/DR:
 Thick white - camera movement direction. Set it carefully.
 Forward in the headset is where the red line appears.
 
-The somewhat comlicated task of producing final VR images out of L and R is now where pulfrichVR is your friend.
+The somewhat tricky task of producing final VR images out of L and R is with highest possible quality is now where pulfrichVR attempts to become your friend by just doing its job.
 First develop your "negative". Press E like in Export. 
-To make an actual picture out of that negative, open the 360 bat runner. There you can click on your "negatives" and have them developed one by one or all at once.
+Finally make an actual picture from your negative: Open 360 bat runner. There you let it develop from your negatives, one by one or all at once.
 
 
 By default pulfrichVR creates one "allround" version, which has perfect stereo with your nose forward and backward. It names those as ...360TB.jpg. Also a "nice to have"-...LR copy will be created, which is intended for watching forward only.
