@@ -30,8 +30,7 @@ pulfrichVR.py, run_pulfrichVR.bat, requirements.txt, LICENSE, NOTICE, README.md
 Install FFmpeg:
 
 Go to [ffmpeg.org](https://ffmpeg.org/download.html)
-and download a full build for Windows.
-Notice: Pick a full build, the reason here is to ensure your ffmpeg gets libsvtav1.
+and download a full build for Windows. By selecting a full build you ensure your ffmpeg has libsvtav1.
 
 Make sure your PATH includes the FFmpeg bin folder. Or copy ffmpeg.exe and ffprobe.exe manually to your pulfrichVR folder.
 
