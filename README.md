@@ -1,10 +1,14 @@
 # pulfrichVR
 pulfrichVR is a small, practical tool for creating high-quality stereo 3D-360 images from 360° video clips.
 Workflow (high level):
-1) Export 360 video from Insta360 Studio
-2) Use pulfrichVR for frame stepping, set Left/Right frames and movement direction
-3) Export: the app writes reproducible ffmpeg scripts per image ("negatives")
-4) Run pending jobs in the built-in workshop / bat runner
+
+1) Shoot a video with Insta 360 where the camera is moving horisontally in a calm non-moving environment. 
+2) Export 360 video with Insta360 Studio
+3) Step trough the video, find Left eye and Right eye, click camera movement direction, press E.   
+4) For each export (E) a new bat file is created. This bat file is your master or negative.
+5) 360 bat runner helps you manage your negatives and transform them into jpg images whenever you like.
+6) Copy to a VR device. My tried and tested combo: Meta quest 3 and Skybox VR video player.
+
 
 ## Windows quick start
 
@@ -27,20 +31,20 @@ Install FFmpeg:
 
 Go to [ffmpeg.org](https://ffmpeg.org/download.html)
 and download a full build for Windows.
-Notice: Make sure you select the full build. That way libsvtav1 will be included into your ffmpeg.exe.
+Notice: Pick a full build, the reason here is to ensure your ffmpeg gets libsvtav1.
 
-Make sure your PATH includes the FFmpeg bin folder. Alternatively, copy ffmpeg.exe and ffprobe.exe manually to your pulfrichVR folder.
+Make sure your PATH includes the FFmpeg bin folder. Or copy ffmpeg.exe and ffprobe.exe manually to your pulfrichVR folder.
 
 Double-click 
 ```bash
 run_pulfrichVR.bat
 ```
    
-When running it for the very first time it will:
+When running it the very first time it will:
 
-create a local .venv virtual environment next to the files, install Python dependencies from requirements.txt (PySide6 6.7+) and launch pulfrichVR.py.
+create a local .venv virtual environment next to the files, install Python dependencies from requirements.txt and launch pulfrichVR.py.
 
-After that, when python is in place, it will serve as a shortcut and just launch pulfrichVR.py.
+After that it will serve as a shortcut and just launch pulfrichVR.py.
 
 <br><br>
 
@@ -76,6 +80,6 @@ Run pulfrichVR:
 ```
 
 On first run it will create a local .venv and install PySide6 and start pulfrichVR.
-On subsequent runs it will just start pulfrichVR.py.
+After that it will just launch pulfrichVR.py.
 
 
