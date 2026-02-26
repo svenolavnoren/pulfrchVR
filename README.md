@@ -39,11 +39,11 @@ Double-click
 run_pulfrichVR.bat
 ```
    
-When running it the very first time it will:
+When run the first time it will:
 
 create a local .venv virtual environment next to the files, install Python dependencies from requirements.txt and launch pulfrichVR.py.
 
-After that it will work as a shortcut and just launch pulfrichVR.py.
+After that it will work as a shortcut and launch pulfrichVR.py.
 
 <br><br>
 
