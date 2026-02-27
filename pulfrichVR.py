@@ -3,8 +3,8 @@
 # ------------------------------
 
 APP_NAME = "pulfrichVR"
-APP_VERSION = "0.9-088"
-#last change: tidy header, new debug print
+APP_VERSION = "0.9-089"
+#last change: fixed T export: no more calling of the obsolete function exportVR
 
 # --- Standardbibliotek ---
 import os
@@ -1608,32 +1608,36 @@ class VideoApp(QMainWindow):
             return
 
 
-        # --- E = export selection ---
-        # 0.89-006 step 4
-        elif key == Qt.Key_E:
-            if hasattr(self, "left_frame") and hasattr(self, "right_frame"):
-                self.export_selection("")  # no extra tag
-            else:
-                print("⚠️ Please mark both S (left) and D (right) frames before exporting.")
+    # --- E = export selection ---  # 0.9-089
+    elif key == Qt.Key_E:
+        if hasattr(self, "left_frame") and hasattr(self, "right_frame"):
+            self.export_selection("")  # no extra tag
+        else:
+            print("⚠️ Please mark both S (left) and D (right) frames before exporting.")
 
-        # 0-9-072 new key X 0.9-081: X removed
-        elif key == Qt.Key_T:
-            # prompt for optional user tag
-            text, ok = QInputDialog.getText(self, "Image tag", "Image tag:")
-            if ok:
-                self.export_selection(text)
-
-
-            text, ok = QInputDialog.getText(self, "VR image tag", "VR image tag:")
-            if ok:
-                self.export_selection_vr(text)
+    # --- T = export selection with tag ---
+    elif key == Qt.Key_T:
+        # Grundkoll: L och R måste finnas innan vi ens visar dialogen
+        lf = getattr(self, "left_frame", None)
+        rf = getattr(self, "right_frame", None)
+        if lf is None or rf is None:
+            msg = "⚠️ Please mark both S (left) and D (right) frames before exporting with tag."
+            print(msg)
+            if hasattr(self, "info_label") and self.info_label is not None:
+                self.info_label.setText(msg)
             return
 
-        else:
-            super().keyPressEvent(event)
+        # En enda frågeruta för taggen (kan vara tom, det är ok)
+        text, ok = QInputDialog.getText(self, "Image tag", "Image tag (optional):")
+        if not ok:
+            return
 
-        #debug 0.9-006b
-        #print("[SANITY] has S/D/A/F?", hasattr(self, "keyPressEvent"))
+        # Nya export_selection tar själv hand om VR_...bat + 360TB + LR
+        self.export_selection(text)
+        return
+
+    else:
+        super().keyPressEvent(event)
 
 
 #/181912
