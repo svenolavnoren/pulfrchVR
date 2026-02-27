@@ -1,0 +1,29 @@
+Creating your first pulfrich VR image
+
+
+Let's begin with explaing from a concrete hands on perspective. I think this is a nice staring point from where you alredy can start your learn by doing experience. When you start feeling you got some grip of it, my in depth advise (pun intended) will be easier to follow.
+
+
+
+Make a mental plan for your scene. Your task is to prodece two usable photos. Those two photos are your left eye and your right eye.
+Find your camera, and optionally some camera holder. Start recording. Move your camera horisontally. Stop recording.
+
+Now start Insta 360 Studio and open the INSV file from the camera which you will export. Typically a 1-2 second clip will be enough. Having a flat world map in mind might be helpful when trying to visualise how this flat picture represents your real perspective. Before clicking Start export make sure Export as: 360 Video, File path = c:\pulfrichVR, Resolution 7680x3840, Encoding Format = ProRes422.  
+
+Now in pulfrichVR, open the MOV file you just created. The vertical lines you see can be imagined as four different compass directions. Your task is first to pick one frame for each eye. Stepping with arrows, use S and D to point out the left and the right eye. Optionally, check with A F and repeat the arrows, S, D procedure. Final step is to manually set the "direction of movement". Keep using A / F and try to allign the white line with what you percive is the forward direction when going left eye (A) -> right eye (F). Looking at the thinner white/grey line which is "backward" might help be a good thing when perfecting this. The color standard here is port. Que!? Well, nautically port means left. When you carefully set your white line, you can simultaniously see that red line. That left direction will always translate into the final forward direction. This will appear in the center forward when you watch the image. An academic would say it's the parallax line and I would say it's the nose line and both are true. 
+TL/DR:
+use arrow S D to set eyes, 
+Thick white - camera movement direction. A F A F... take your time here!
+The red line will appear as forward in the final image.
+When you are set here, press E.
+
+The somewhat comlicated task of producing final VR images out of L and R is now where pulfrichVR is your friend.
+First develop your "negative". Press E like in Export. 
+To make an actual picture out of that negative, open the 360 bat runner. There you can click on your "negatives" and have them developed one by one or all at once.
+
+
+By default pulfrichVR creates one "allround" version, which has perfect stereo with your nose forward and backward. It names those as ...360TB.jpg. Also a "nice to have"-...LR copy will be created, which is intended for watching forward only.
+
+
+I would like to share some more insights about settings here and camera shots there, what works and what dosn't. For now I hope this briefing will get you started. 
+
