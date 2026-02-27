@@ -4,7 +4,7 @@
 
 APP_NAME = "pulfrichVR"
 APP_VERSION = "0.9-088"
-#last change: tidy header
+#last change: tidy header, new debug print
 
 # --- Standardbibliotek ---
 import os
@@ -165,6 +165,14 @@ def get_ffprobe_cmd() -> str:
 # Export-läge: "timestamp_center" (mitt-i-rutan med -ss)
 # eller "select_by_index" (ffmpeg select=eq(n,N))
 EXPORT_FRAME_PICK_MODE = "select_by_index"  # istället för "timestamp_center"
+
+def debug_print_environment():
+    print(f"RAW_IS_WIN={RAW_IS_WIN}, IN_WINE={IN_WINE}, IS_NATIVE_WIN={IS_NATIVE_WIN}, IS_WIN={IS_WIN}")
+    print(f"RUNTIME_DIR={RUNTIME_DIR}")
+    print(f"INTERNAL_DIR={INTERNAL_DIR}")
+    print(f"APP_DIR={APP_DIR}")
+    print(f"FFMPEG={get_ffmpeg_cmd()}")
+    print(f"FFPROBE={get_ffprobe_cmd()}")
 
 class VideoOverlay(QGraphicsItem):
     """Draws dynamic guide lines (red, green, gray, white) over the video."""
