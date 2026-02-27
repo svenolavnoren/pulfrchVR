@@ -1,152 +1,170 @@
 # ------------------------------
-APP_NAME = "pulfrichVR"
-APP_VERSION = "0.9-087"
-# Copyright (c) 2025–2026 Sven-Olav Norén
+#  pulfrichVR – main application
 # ------------------------------
 
-import os
-import platform, glob, shlex, stat, math
+APP_NAME = "pulfrichVR"
+APP_VERSION = "0.9-088"
+#last change: tidy header
 
-# Rå Windows-flagga (inklusive Wine) #0.9-066
+# --- Standardbibliotek ---
+import os
+import sys
+import platform
+import math
+import stat
+import glob
+import shlex
+import subprocess
+import json
+from datetime import date
+from pathlib import Path
+import re
+
+# --- PySide6 / Qt ---
+from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QLabel,
+    QFileDialog,
+    QVBoxLayout,
+    QWidget,
+    QGraphicsView,
+    QGraphicsScene,
+    QGraphicsLineItem,
+    QGraphicsItem,
+    QDockWidget,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QHBoxLayout,
+    QAbstractItemView,
+    QCheckBox,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QSpinBox,
+    QMenu,
+    QFrame,
+    QMessageBox,
+    QInputDialog,
+    QPlainTextEdit,
+    QListView,
+    QTreeView,
+)
+from PySide6.QtMultimediaWidgets import QGraphicsVideoItem
+from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
+from PySide6.QtCore import Qt, QUrl, QTimer, QPointF, QRectF, QStandardPaths
+from PySide6.QtGui import (
+    QPainter,
+    QPen,
+    QColor,
+    QShortcut,
+    QCursor,
+    QAction,
+    QFont,
+    QMouseEvent,
+    QKeySequence,
+)
+
+# ------------------------------
+#  Plattform / runtime-detektion
+# ------------------------------
+
+# Rå Windows-flagga (inklusive Wine)
 RAW_IS_WIN = platform.system().lower().startswith("win")
 
-# Heuristik: är vi ett Windows-program som körs via Wine?
+# Heuristik: körs som Windows-program via Wine?
 IN_WINE = RAW_IS_WIN and (
-    "WINELOADERNOEXEC" in os.environ or
-    "WINEPREFIX" in os.environ
+    "WINELOADERNOEXEC" in os.environ or "WINEPREFIX" in os.environ
 )
 
 # Äkta Windows-burk (inte Wine)
 IS_NATIVE_WIN = RAW_IS_WIN and not IN_WINE
 
-# Behåll IS_WIN för all logik som faktiskt behöver "Windows-beteende"
+# För all logik som behöver "Windows-beteende" (paths, .exe-namn osv)
+# I praktiken: "vi beter oss som Windows" = äkta Windows + Wine
 IS_WIN = RAW_IS_WIN
 
-import sys
-
-import glob
-import platform
-from datetime import date
-
-
-import subprocess
-import json
-from pathlib import Path
-import shutil
-
-
-#0.9-012 1)
-# Widgets
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QLabel, QFileDialog, QVBoxLayout, QWidget,
-    QGraphicsView, QGraphicsScene, QGraphicsLineItem, QGraphicsItem,
-    QDockWidget, QListWidget, QListWidgetItem, QPushButton, QHBoxLayout,
-    QAbstractItemView, QCheckBox, QDialog, QDialogButtonBox, QFormLayout,
-    QSpinBox, QMenu, QFrame, QMessageBox, QInputDialog, QPlainTextEdit,
-    QListView, QTreeView
-)
-import re
-
-# Multimedia
-from PySide6.QtMultimediaWidgets import QGraphicsVideoItem
-from PySide6.QtMultimedia import QMediaPlayer, QAudioOutput
-
-# Core / Gui
-from PySide6.QtCore import Qt, QUrl, QTimer, QPointF, QRectF, QStandardPaths
-from PySide6.QtGui import QPainter, QPen, QColor, QShortcut, QCursor, QAction, QFont
-
-from PySide6.QtGui import QMouseEvent
-
-
-#0.89-003
-from PySide6.QtGui import QKeySequence, QShortcut
-
-
-#0.9-008 A
-from pathlib import Path
-import sys, os, platform, math, stat, glob, subprocess, shlex  # du har redan mycket av detta
-
-IS_WIN = platform.system().lower().startswith("win")
+# Packad med PyInstaller eller ej
 FROZEN = getattr(sys, "frozen", False)
+
+# ------------------------------
+#  Paths för runtime och interna filer
+# ------------------------------
+
+# Där pulfrichVR.exe ligger när packad, annars pulfrichVR.py
+RUNTIME_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
+
+def runtime_path(*parts: str) -> Path:
+    """Sökväg relativt runtime-katalogen (bat-filer, bilder, osv)."""
+    return RUNTIME_DIR.joinpath(*parts)
+
+# PyInstaller intern dir (dist/.../_internal) när packad,
+# annars samma som RUNTIME_DIR
+INTERNAL_DIR = Path(getattr(sys, "_MEIPASS", RUNTIME_DIR))
+
+def internal_path(*parts: str) -> Path:
+    """Sökväg relativt PyInstallers interna katalog (bundlat ffmpeg mm)."""
+    return INTERNAL_DIR.joinpath(*parts)
+
+# Separat "appdir" ifall vi i framtiden vill särskilja
+# "koden ligger här" från "negativen/jobben ligger här".
+APP_DIR = RUNTIME_DIR
+
+def app_path(*parts: str) -> Path:
+    """Sökväg relativt appens katalog (kod, README, osv)."""
+    return APP_DIR.joinpath(*parts)
+
 WORKSHOP_LABEL = "360 bat runner"  # 0.9-049
 APP_TITLE = APP_NAME               # 0.9-087: use pulfrichVR as window title
 
-#0.9-009a 1)
-# Där Home3dFrames.exe ligger när packad, annars py-filen
-RUNTIME_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
+# ------------------------------
+#  FFmpeg / FFprobe-kommandon
+# ------------------------------
 
-def runtime_path(*parts):
-    return RUNTIME_DIR.joinpath(*parts)
-
-
-# Mappen där Home3dFrames.exe ligger när packad, annars skriptmappen
-RUNTIME_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
-
-# PyInstaller internal dir (dist/.../_internal) när packad
-INTERNAL_DIR = Path(getattr(sys, "_MEIPASS", RUNTIME_DIR))
-
-# 0.9-043: arbetsmapp för one-shot-bilder (L/R-png)
-MONO_DIR_NAME = "VideoOneshot"
-
-
-# Indexer för raderna i home3d_photos_defaults.txt (0-baserat):
-IDX_TAG        = 0   # 1  tagname
-IDX_IMG1       = 1   # 2  img1
-IDX_IMG2       = 2   # 3  img2
-IDX_IMG3       = 3   # 4  img3
-IDX_IMG4       = 4   # 5  img4
-IDX_RES        = 5   # 6  resolution
-IDX_DIR        = 6   # 7  direction
-IDX_DIR_ALT    = 7   # 8  alternative direction
-IDX_KEEP_WORK  = 8   # 9  Keep temporary files
-IDX_SBS        = 9   # 10 create SBS files
-IDX_KEEP_RIGHT = 10  # 11 Keep right focused images
-IDX_ANA        = 11  # 12 create anaglyph images
-IDX_SINGLE     = 12  # 13 create single stereo images
-IDX_PNG_MODE   = 13  # 14 PNG/JPG flagga (0/1)
-IDX_LEFT_FOCUS = 14  # 15 Left focus
-IDX_RIGHT_FOCUS= 15  # 16 Right focus
-
-
-def runtime_path(*parts):
-    return RUNTIME_DIR.joinpath(*parts)
-
-def internal_path(*parts):
-    return INTERNAL_DIR.joinpath(*parts)
-
-
-
-IS_WIN = platform.system().lower().startswith("win")
-
-# Pekar på exe-mappen när packad, annars skriptmappen
-APP_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
-
-def app_path(*parts):
-    return APP_DIR.joinpath(*parts)
-
-# 0.9-009 2)
 def get_ffmpeg_cmd() -> str:
-    local = runtime_path("ffmpeg.exe" if IS_WIN else "ffmpeg")
+    """
+    Hitta ffmpeg:
+    1) RUNTIME_DIR/ffmpeg(.exe)
+    2) INTERNAL_DIR/ffmpeg(.exe) (PyInstaller-bundlat)
+    3) FFMPEG_CMD env eller 'ffmpeg' i PATH
+    """
+    exe_name = "ffmpeg.exe" if IS_WIN else "ffmpeg"
+
+    local = runtime_path(exe_name)
     if local.exists():
         return str(local)
-    local2 = internal_path("ffmpeg.exe" if IS_WIN else "ffmpeg")
+
+    local2 = internal_path(exe_name)
     if local2.exists():
         return str(local2)
+
     return os.environ.get("FFMPEG_CMD", "ffmpeg")
 
+
 def get_ffprobe_cmd() -> str:
-    local = runtime_path("ffprobe.exe" if IS_WIN else "ffprobe")
+    """
+    Hitta ffprobe:
+    1) RUNTIME_DIR/ffprobe(.exe)
+    2) INTERNAL_DIR/ffprobe(.exe)
+    3) FFPROBE_CMD env eller 'ffprobe' i PATH
+    """
+    exe_name = "ffprobe.exe" if IS_WIN else "ffprobe"
+
+    local = runtime_path(exe_name)
     if local.exists():
         return str(local)
-    local2 = internal_path("ffprobe.exe" if IS_WIN else "ffprobe")
+
+    local2 = internal_path(exe_name)
     if local2.exists():
         return str(local2)
+
     return os.environ.get("FFPROBE_CMD", "ffprobe")
 
 
-
-# Export-läge: "timestamp_center" (mitt-i-rutan med -ss) eller "select_by_index" (ffmpeg select=eq(n,N))
-EXPORT_FRAME_PICK_MODE = "select_by_index"   # istället för "timestamp_center" 
+# Export-läge: "timestamp_center" (mitt-i-rutan med -ss)
+# eller "select_by_index" (ffmpeg select=eq(n,N))
+EXPORT_FRAME_PICK_MODE = "select_by_index"  # istället för "timestamp_center"
 
 class VideoOverlay(QGraphicsItem):
     """Draws dynamic guide lines (red, green, gray, white) over the video."""
