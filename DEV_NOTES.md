@@ -108,3 +108,24 @@ Den här filen är för oss som bygger pulfrichVR. Kort, rak och utan sirap.
 - De:
   - får minst en tydlig *“wow, där står jag ju”*-upplevelse
   - vill fortsätta använda verktyget på eget initiativ.
+
+--------------------------------------------------
+## Supported environments (1.0 scope)
+
+Tier A – primary targets
+- Windows 10/11 (64-bit)
+  - Python 3.x, ideally in a virtualenv
+  - Run via: `python pulfrichVR.py`
+- Linux desktop (e.g. Ubuntu, Linux Mint, Debian)
+  - Python 3.x, ideally in a virtualenv
+  - Run via: `python3 pulfrichVR.py`
+
+Tier B – best-effort
+- macOS (Intel / Apple Silicon)
+  - Python 3.x + virtualenv
+  - Run via: `python3 pulfrichVR.py`
+  - May require some extra steps for Qt / ffmpeg.
+
+Out of scope for 1.0
+- PyInstaller-based .exe builds
+- Running pulfrichVR under Wine
