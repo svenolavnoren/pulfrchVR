@@ -1,0 +1,93 @@
+
+<slutet på chat 2026-02-25>
+3. Förberedelser inför kodstädningen (utan att börja riva i koden än)
+
+Om du vill maximera “ren hjärna” när vi startar nästa chat, är det här tre enkla saker du kan göra i lugn takt:
+
+Skriv ner moduler/”delar” du tycker dig se redan nu
+
+Typ:
+
+GUI / PySide6
+
+Logik för frame-val + L/R + rörelseriktning
+
+Jobbhantering (“pending / in progress / done”)
+
+FFmpeg-generering (de stora kommandosträngarna)
+
+Windows/Linux-specifika delar (bat/sh, paths, env-checkar)
+
+Det räcker att du gör detta som punktlista i README eller en separat DEV_NOTES.md. Inget snyggt behövs, bara hjärndump.
+
+Lista “tekniska skulder” som du själv stör dig på
+
+Exempel (hittar på, men du känner igen typen):
+
+“Här inne i funktionen X är det 3 liknande FFmpeg-varianter – hade gärna haft dem samlade.”
+
+“Den här globala variabeln är lite magisk.”
+
+“Den här biten känns bräcklig om jag ändrar naming-konventionerna sen.”
+
+Skriv dem som TODO-lista eller som GitHub Issues – det blir vår shoppinglista när vi börjar städa.
+
+Bestäm vad som är “helig funktionalitet”
+
+Dvs: vad får vi absolut inte paja när vi städar?
+
+T.ex.:
+
+Normal LR-produktion från vanlig Insta360-export (din vardagsworkhorse).
+
+Nya .insv-round-tour-läget med varningen.
+
+Workshop/bat-runner så att allt 3d-magiskt fortsätter rulla.
+
+De här kan vi sedan skydda genom små sanity-tester (även om det “bara” blir enkla manuella testlistor i början).
+
+4. Din “avlagd mobil med Linux”-idé (kort kommentar)
+
+Jag tar den bara kort nu eftersom du sa “inte fastna där”:
+
+Det att vi nu kör via ren Python + venv + ffmpeg i stället för .exe gör det mycket mer realistiskt att:
+
+slänga in det på en ARM-burk
+
+byta ffmpeg-build
+
+ev. köra på en slimmad Linux på mobil/mini-PC
+
+Så idén är absolut inte spånig – den blir snarare naturlig fortsättning om/ när du vill göra en “pulfrichVR lite-server” eller liknande. Men vi parkerar detaljerna tills vidare, som du sa.
+
+5. Vad jag föreslår att vi gör konkret härnäst
+
+Här i den här chatten (om du vill fortsätta lite till innan pausen):
+
+Fix:
+
+README → pulfrichVR.py i stället för pulfrichVR_0.9-087.py.
+
+Kanske skapa en enkel DEV_NOTES.md med:
+
+3–10 bullets om hur du tror koden är strukturerad idag.
+
+3–10 bullets med “saker som känns röriga / sköra”.
+
+Sedan: ny chat för själva städningen.
+Där börjar vi med:
+
+Jag läser igenom pulfrichVR.py i repot.
+
+Jag gör ett första “arkitektur-sammandrag” åt dig: vilka block finns, hur de hänger ihop.
+
+Vi skissar ett mål: “pulfrichVR 1.0 – ren grund, samma funktioner”.
+
+Sen tar vi det i små Arne-vänliga steg (t.ex. först kapsla in FFmpeg-logiken, därefter path/naming-utils, därefter GUI-städning, osv).
+
+Så: ja, din plan med ny kodstädnings-chat + använda README/Arne-guiden som pseudokod är spot-on.
+När du känner dig redo: fixa gärna de där små README-grejerna, gör en liten DEV_NOTES/brain-dump – och sen hoppar vi över till “städ-chatten” och börjar plocka isär och snygga till bit för bit.
+
+</slutet på chat 2026-02-25>
+
+ 
