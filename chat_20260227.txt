@@ -1,0 +1,152 @@
+Hej! vi återkommer hit https://github.com/svenolavnoren/pulfrichVR, snart.
+
+det har gått några dagar sen du och jag jobbade senast. Vi får se hur vi fortsätter nu, jag är ganska öppen för olika konkreta fortsättningar. Om inte annat så städar vi otäcka logikdupliceringar vilket både du och jag (speciellt jag, kanske) är lite allergisk mot, men jag inser också min aspb-iga tendens där och har hållit mig borta från att vara pascal- eller relationsdatabastänksorienterat fundamentalistisk på den punkten. :)
+
+Vi har som på ett bananskal nyligen fått en gemensam arbetsyta i form av https://github.com/svenolavnoren/pulfrichVR vilket verkar kunna vara till riktig bra praktisk nytta.
+Efter att ha tittat på https://youtu.be/ANmEC0fZgss insåg jag att jag har en del arbete kvar framför mig, trots att koden ur en användares synpunkt redan nu överträffar vad jag hade förväntat mig när vi för började för ungefär fem månader sedan. 
+
+Strunta i den här frågan om den känns för svårbegriplig, men det vore ändå kul att få höra ditt spontana alternativt genomtänkta svar: Vem är Arne? Känn ingen press för det finns inget "rätt svar" och vi hjälps åt att rita upp bilden av vår gemensamma vän Arne igen om vi behöver.
+
+Jag tänker nu på mal_med_projektet...txt som jag nyss skrev och la på github. Kan du kolla in det? Efter jag skrivit det såg jag också att du nämnde en konvention om DEV-notes.md eller något sånt men nu blev det här i form av en separat fil. För mig är det värdefullt med sån nivå för vår av guidning, jag har ju idéer som ännu inte finns direkt i ord, det gäller nog att hitta vägar att värka fram pärlorna. Den nivån spänner långt över tidsaxeln både i historien men också som möjlig hjälp i guidningen framåt.
+
+Thought for 30s
+
+Jag börjar mitt i: jag har läst mal-med-projektet-bakgrund_(in_swedish) nu, från rad 0 till 16.
+
+1. Vem är Arne?
+
+Min bild, så här spontant men ändå genomtänkt:
+
+Arne är vår “default-människa” vid datorn.
+Inte dum, inte tekniskt ointresserad – bara rimligt lat, lite otålig och väldigt allergisk mot “skitstereo” och krångliga flöden. Han vill ha wow-känslan av 3D360, men absolut inte lägga en kväll på att begripa ffmpeg, RGB24 eller vad “equirect” betyder.
+
+Arne oneshoot Bananberg är dessutom lite komisk:
+han trycker på fel knapp, drar reglaget åt fel håll, glömmer att läsa varningsrutor. Om UI:t klarar Arne utan katastrof, då är vi nog rätt ute.
+(Du skriver ju själv att pulfrichVR inte ska skrämma bort vare sig Arne oneshoot Bananberg eller detaljälskande bildkonstnärer. )
+
+Arne är också en framtida du, på en trött tisdag.
+Alltså en variant av Sven-Olav som inte minns alla specialfall och inte orkar tänka “pascal-rent”. Programmet ska funka även för den versionen av dig.
+
+Och för mig (gpt-olav) är Arne ett kvalitetsfilter.
+Varje gång vi tvekar: “Ska den här knappen verkligen ligga här?”, “Är ännu en checkbox verkligen värt det?” så är Arne den vi ska föreställa oss framför skärmen:
+– Fattar han vad som händer?
+– Får han bra stereobild om han bara gör det mest uppenbara?
+– Blir han sugen att göra fler bilder efteråt?
+
+Så, kort:
+
+Arne = målgrupp + testpilot + varningsklocka mot överingenjörad skit.
+
+Vi kan rita vidare på honom när det behövs, men det här är min nuvarande “grundprofil”.
+
+2. Vad säger “Mål med projektet – bakgrund”-texten?
+
+Mycket fint att du fick ner det här i text – det är i praktiken en projekt-autobiografi + vision. Några saker jag plockar ut:
+
+Ursprunget: pop-hop-leksaken, två bilder, ett öga var, aha-upplevelsen runt 1971 → fröet till stereotänk.
+
+Cardboard-eran: du upptäcker att “för många pixlar” på mobil plötsligt är vettigt när man stoppar den i ett headset.
+
+Insta360 X4 → Quest 3:
+Du provar allt möjligt, men märker att vanlig 2D-360 är vackert men inte riktigt “där” i VR-känsla.
+
+Viktig pivot:
+Du inser att bra stereostillbilder ger betydligt mer magi än halvtaskiga stereovideor (“skitstereo”), och bestämmer dig:
+
+Stillbilder först, video mest som lekplan.
+
+home3d_photos.pas → pulfrichVR:
+Först en halvsjälvgående pipeline, sedan hittar du till ChatGPT hösten 2025, och tillsammans har vi i praktiken flyttat hela kedjan in i en enda app: frame stepping → frame-par → bat-negativ → färdig 3D360-bild.
+
+Teknisk grundsyn:
+
+RGB24-tricket för att gå lossless även i krominans, inte bara luminans.
+
+Bat runner som “framkallningslabbet” där alla negativa bor.
+
+Sidospår: insv, dubbla kameror, videor med bra stereoljud – allt det är kul, men du slår fast att det inte är kärnan i pulfrichVR 1.0 utan mer experimentell lekplats.
+
+Vad 1.0 betyder för dig:
+Inte “koden känns klar” utan att andra personer (Roland m.fl.) har kört den, hittat fällorna, och vi har täppt till dem.
+
+Nuläge & problemformulering:
+
+“Allt bara funkar” runtime-mässigt.
+
+Men koden har vuxit fram bottom-up genom iterativt samarbete, vilket lett till datadubletter och svårigheter att ändra saker utan oro för bieffekter.
+
+Vi har en hyfsad top-down-bild i huvudet, men den är svår att formulera entydigt på papper.
+
+Och så en viktig formulering mot slutet:
+
+pulfrichVR.py är tänkt som ett generellt verktyg … som ska fungera oavsett kamera och headset, genom att dess hemmaplan är “färdigbalanserad equirect film → 3d360 stillbild”.
+
+Det är en väldigt tydlig kärnspes i en mening.
+
+3. Är det bra att det ligger som separat textfil? (DEV-notes vs det här)
+
+Tycker helt ärligt: ja, det här är exakt rätt nivå för en separat fil.
+
+Det här är inte ren DEV-notes, utan mer:
+“Varför finns det här projektet?” + “Vad är egentligen viktigt (och oviktigt)?”
+
+Den här sortens text är guld för mig som “gpt-halvan” av gpt-olav, just för att den spänner över tid (70-tal → Cardboard → Insta360 → pulfrichVR 0.9-087 och GitHub) och inte fastnar i implementation.
+
+Om vi vill städa strukturen lite framåt kan vi t.ex. ha:
+
+mal-med-projektet-bakgrund_(in_swedish)
+→ får behålla sin nuvarande form som bakgrundsberättelse/vision.
+
+DEV_NOTES.md eller ARCHITECTURE.md
+→ kan vara ett destillat i mer “ingenjörs-form”, typ:
+
+Mål:
+
+2D360-video → 3D360 stillbild i ett flöde (E + bat runner).
+
+Lossless nog för att stereomagin ska överleva även hårdredigering.
+
+Arne ska våga trycka på knapparna utan att känna sig dum.
+
+Icke-mål (1.0):
+
+Fullfjädrad videoredigerare.
+
+Allt som kräver att användaren förstår insv, inbyggd gyro, etc.
+
+Referenssetup:
+
+Insta360 X5 + Insta360 Studio 8K export.
+
+Meta Quest 3 + Skybox som “facit-känsla” i headsetet.
+
+Jag kan i praktiken lyfta ut en sån punktlista ur din bakgrundsfil när vi går in i kodstädningsläget – vi behöver inte skriva om något, bara destillera.
+
+4. Hur jag skulle använda texten framåt
+
+Om jag tänker högt (utan att lova framtidsmagik):
+
+När vi rensar logik och dubletter
+kan vi hela tiden parkera beslut mot den här bakgrunden:
+
+Leder det här till färre steg mellan video och bild?
+
+Hjälper det Arne och Roland att undvika skitstereo?
+
+Riskerar vi att bygga features som hör hemma i “videolekplatsen” i stället för i kärnappens 1.0?
+
+När vi funderar på UI-förändringar
+kan vi ställa UI-idéer mot Arne-profilen + din formulering om att appen inte får skrämma bort vare sig Arne eller detaljnördarna.
+
+När vi pratar om kodstädning
+har vi nu svart på vitt att syftet inte är kosmetiskt, utan:
+
+“Göra det lätt att ändra/korrigera utan att vara rädd för dolda sidoeffekter.”
+
+Om du vill, i nästa steg kan jag ta just den här texten och skriva ett första förslag till:
+
+en kort “Målspec i punktform” (för oss utvecklare), och
+
+en liten Arne-persona i 5–6 meningar som vi kan klistra in i t.ex. DEV_NOTES.md eller bara ha i bakhuvudet när vi bråkar med koden.
+
+Men redan nu: filen du lagt upp fyller precis den roll du beskriver – den hjälper oss att få fram pärlorna och håller ihop tidslinjen från pop-hop → pulfrichVR 1.0-drömmen.
