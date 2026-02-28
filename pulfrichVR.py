@@ -3,8 +3,8 @@
 # ------------------------------
 
 APP_NAME = "pulfrichVR"
-APP_VERSION = "0.9-089"
-#last change: fixed T export: no more calling of the obsolete function exportVR
+APP_VERSION = "0.9-090"
+# Last change: wine and pyinstaller support removed
 
 # --- Standardbibliotek ---
 import os
@@ -67,87 +67,52 @@ from PySide6.QtGui import (
 )
 
 # ------------------------------
-#  Plattform / runtime-detektion
+# Plattform / runtime-detektion
 # ------------------------------
 
-# Rå Windows-flagga (inklusive Wine)
-RAW_IS_WIN = platform.system().lower().startswith("win")
-
-# Heuristik: körs som Windows-program via Wine?
-IN_WINE = RAW_IS_WIN and (
-    "WINELOADERNOEXEC" in os.environ or "WINEPREFIX" in os.environ
-)
-
-# Äkta Windows-burk (inte Wine)
-IS_NATIVE_WIN = RAW_IS_WIN and not IN_WINE
-
-# För all logik som behöver "Windows-beteende" (paths, .exe-namn osv)
-# I praktiken: "vi beter oss som Windows" = äkta Windows + Wine
-IS_WIN = RAW_IS_WIN
-
-# Packad med PyInstaller eller ej
-FROZEN = getattr(sys, "frozen", False)
+# Enkel och ärlig plattforms-flagga: är vi på Windows?
+IS_WIN = platform.system().lower().startswith("win")
 
 # ------------------------------
-#  Paths för runtime och interna filer
+# Paths för runtime
 # ------------------------------
 
-# Där pulfrichVR.exe ligger när packad, annars pulfrichVR.py
-RUNTIME_DIR = Path(sys.executable).resolve().parent if FROZEN else Path(__file__).resolve().parent
+# Där pulfrichVR.py ligger. All IO (bat-filer, 360TB-bilder osv) hänger på den.
+RUNTIME_DIR = Path(__file__).resolve().parent
 
 def runtime_path(*parts: str) -> Path:
     """Sökväg relativt runtime-katalogen (bat-filer, bilder, osv)."""
     return RUNTIME_DIR.joinpath(*parts)
 
-# PyInstaller intern dir (dist/.../_internal) när packad,
-# annars samma som RUNTIME_DIR
-INTERNAL_DIR = Path(getattr(sys, "_MEIPASS", RUNTIME_DIR))
-
-def internal_path(*parts: str) -> Path:
-    """Sökväg relativt PyInstallers interna katalog (bundlat ffmpeg mm)."""
-    return INTERNAL_DIR.joinpath(*parts)
-
-# Separat "appdir" ifall vi i framtiden vill särskilja
-# "koden ligger här" från "negativen/jobben ligger här".
-APP_DIR = RUNTIME_DIR
-
-def app_path(*parts: str) -> Path:
-    """Sökväg relativt appens katalog (kod, README, osv)."""
-    return APP_DIR.joinpath(*parts)
-
 WORKSHOP_LABEL = "360 bat runner"  # 0.9-049
 APP_TITLE = APP_NAME               # 0.9-087: use pulfrichVR as window title
 
 # ------------------------------
-#  FFmpeg / FFprobe-kommandon
+# FFmpeg / FFprobe-kommandon
 # ------------------------------
 
 def get_ffmpeg_cmd() -> str:
     """
     Hitta ffmpeg:
     1) RUNTIME_DIR/ffmpeg(.exe)
-    2) INTERNAL_DIR/ffmpeg(.exe) (PyInstaller-bundlat)
-    3) FFMPEG_CMD env eller 'ffmpeg' i PATH
+    2) FFMPEG_CMD env eller 'ffmpeg' i PATH
     """
     exe_name = "ffmpeg.exe" if IS_WIN else "ffmpeg"
 
+    # Först: lokalt ffmpeg bredvid pulfrichVR.py
     local = runtime_path(exe_name)
     if local.exists():
         return str(local)
 
-    local2 = internal_path(exe_name)
-    if local2.exists():
-        return str(local2)
-
-    return os.environ.get("FFMPEG_CMD", "ffmpeg")
+    # Sedan: ev. env-override eller bara 'ffmpeg' i PATH
+    return os.environ.get("FFMPEG_CMD", exe_name)
 
 
 def get_ffprobe_cmd() -> str:
     """
     Hitta ffprobe:
     1) RUNTIME_DIR/ffprobe(.exe)
-    2) INTERNAL_DIR/ffprobe(.exe)
-    3) FFPROBE_CMD env eller 'ffprobe' i PATH
+    2) FFPROBE_CMD env eller 'ffprobe' i PATH
     """
     exe_name = "ffprobe.exe" if IS_WIN else "ffprobe"
 
@@ -155,22 +120,19 @@ def get_ffprobe_cmd() -> str:
     if local.exists():
         return str(local)
 
-    local2 = internal_path(exe_name)
-    if local2.exists():
-        return str(local2)
-
-    return os.environ.get("FFPROBE_CMD", "ffprobe")
+    return os.environ.get("FFPROBE_CMD", exe_name)
 
 
 # Export-läge: "timestamp_center" (mitt-i-rutan med -ss)
 # eller "select_by_index" (ffmpeg select=eq(n,N))
 EXPORT_FRAME_PICK_MODE = "select_by_index"  # istället för "timestamp_center"
 
+
 def debug_print_environment():
-    print(f"RAW_IS_WIN={RAW_IS_WIN}, IN_WINE={IN_WINE}, IS_NATIVE_WIN={IS_NATIVE_WIN}, IS_WIN={IS_WIN}")
+    """Liten hjälp-funktion när vi felsöker på olika burkar."""
+    print(f"IS_WIN={IS_WIN}")
     print(f"RUNTIME_DIR={RUNTIME_DIR}")
-    print(f"INTERNAL_DIR={INTERNAL_DIR}")
-    print(f"APP_DIR={APP_DIR}")
+    print(f"PYTHON_EXE={sys.executable}")
     print(f"FFMPEG={get_ffmpeg_cmd()}")
     print(f"FFPROBE={get_ffprobe_cmd()}")
 
@@ -352,7 +314,7 @@ class VideoApp(QMainWindow):
         - På andra system (Mint/Wine/mac): endast de sista 7 tecknen, t.ex. '042.mp4'
         """
         if IS_WIN:
-            # Riktigt Windows: samma som tidigare
+            # Windows: fullständigt filnamn
             if clip:
                 return f"{APP_TITLE} – {clip}"
             else:
