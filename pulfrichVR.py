@@ -3,8 +3,12 @@
 # ------------------------------
 
 APP_NAME = "pulfrichVR"
-APP_VERSION = "0.9-090"
+APP_VERSION = "0.9-090-1"
 # Last change: wine and pyinstaller support removed
+# changed between from 0.9-090 and 0.9-090-1: re-pasted header with hashtag (remark sign) taken from
+# chatgpts suggestion. copied back into repo by using manual copy with ctrl-c from linux standard text editor
+# and pasted with the standard github editor  with ctrl-v (now not touching the fancy github "." editor) 
+# result: This code still crashes with syntax error refering to ''elif key == Qt.Key_E:'' near line 1580
 
 # --- Standardbibliotek ---
 import os
@@ -77,12 +81,15 @@ IS_WIN = platform.system().lower().startswith("win")
 # Paths för runtime
 # ------------------------------
 
-# Där pulfrichVR.py ligger. All IO (bat-filer, 360TB-bilder osv) hänger på den.
+# Där pulfrichVR.py ligger.
+# All IO (bat-filer, 360TB-bilder osv) hänger på den.
 RUNTIME_DIR = Path(__file__).resolve().parent
+
 
 def runtime_path(*parts: str) -> Path:
     """Sökväg relativt runtime-katalogen (bat-filer, bilder, osv)."""
     return RUNTIME_DIR.joinpath(*parts)
+
 
 WORKSHOP_LABEL = "360 bat runner"  # 0.9-049
 APP_TITLE = APP_NAME               # 0.9-087: use pulfrichVR as window title
@@ -90,6 +97,7 @@ APP_TITLE = APP_NAME               # 0.9-087: use pulfrichVR as window title
 # ------------------------------
 # FFmpeg / FFprobe-kommandon
 # ------------------------------
+
 
 def get_ffmpeg_cmd() -> str:
     """
@@ -135,7 +143,6 @@ def debug_print_environment():
     print(f"PYTHON_EXE={sys.executable}")
     print(f"FFMPEG={get_ffmpeg_cmd()}")
     print(f"FFPROBE={get_ffprobe_cmd()}")
-
 class VideoOverlay(QGraphicsItem):
     """Draws dynamic guide lines (red, green, gray, white) over the video."""
     def __init__(self, video_item):
